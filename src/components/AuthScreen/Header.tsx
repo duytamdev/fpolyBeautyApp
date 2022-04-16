@@ -6,9 +6,10 @@ import ButtonGoogle from './ButtonGoogle';
 interface ParamsHeaderProps {
   title: string;
   sub: string;
+  style?: any;
 }
-const Header = ({ title, sub }:ParamsHeaderProps) => (
-        <View style={styles.container}>
+const Header = ({ title, sub, style }:ParamsHeaderProps) => (
+        <View style={[styles.container, style]}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.sub}>{sub}</Text>
         </View>

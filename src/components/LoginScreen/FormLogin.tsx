@@ -1,9 +1,10 @@
 import React from 'react';
 import {
-  Text, View, StyleSheet, Button,
+  Text, View, StyleSheet,
 } from 'react-native';
 import { Formik, FormikValues } from 'formik';
 import * as Yup from 'yup';
+import { useNavigation } from '@react-navigation/native';
 import MyInput from '../AuthScreen/MyInput';
 import { COLORS } from '../../constants';
 import MyButton from '../AuthScreen/MyButton';
@@ -12,9 +13,14 @@ const loginYupSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email format').required('Required!'),
   password: Yup.string().min(8, 'Minimum 8 characters').required('Required!'),
 });
+
 const FormLogin = () => {
+  const navigation = useNavigation();
   const handleLogin = (values:FormikValues) => {
     console.log('handleSubmit', values);
+  };
+  const handleGoToSignUp = () => {
+    navigation.navigate('Register');
   };
   return (
         <Formik initialValues={{
@@ -50,7 +56,7 @@ const FormLogin = () => {
                     <MyButton disabled={!isValid} title={'Login'} onPress={handleSubmit}/>
                     <View style={styles.sectionRegister}>
                         <Text>Don't have an account? </Text>
-                        <Text style={styles.textPrimary}>Sign Up</Text>
+                        <Text onPress={handleGoToSignUp} style={styles.textPrimary}>Sign Up</Text>
                     </View>
                 </View>
             )}
