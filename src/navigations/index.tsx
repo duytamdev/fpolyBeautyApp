@@ -9,7 +9,7 @@ const RootNavigation = () => (
             headerShown: false,
           }}>
               <Stack.Screen name={'Auth'} component={AuthStack} />
-              <Stack.Screen name={'BottomTab'} component={BottomTabs} />
+              <Stack.Screen name={'BottomTabs'} component={BottomTabs} />
           </Stack.Navigator>
 );
 export default RootNavigation;

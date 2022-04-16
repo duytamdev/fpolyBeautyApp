@@ -5,9 +5,7 @@ import CreatePinScreen from '../screens/CreatePinScreen';
 import AccountScreen from '../screens/AccountScreen';
 
 const Tab = createBottomTabNavigator();
-const BottomTabs = () => {
-  console.log('BottomTabs');
-  return (
+const BottomTabs = () => (
       <Tab.Navigator screenOptions={{
         headerShown: false,
       }}>
@@ -15,6 +13,5 @@ const BottomTabs = () => {
           <Tab.Screen name="CreatePin" component={CreatePinScreen} />
           <Tab.Screen name="Account" component={AccountScreen} />
       </Tab.Navigator>
-  );
-};
+);
 export default BottomTabs;

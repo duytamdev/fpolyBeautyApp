@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Text, View, StyleSheet,
+  Text, View, StyleSheet, Alert,
 } from 'react-native';
 import { Formik, FormikValues } from 'formik';
 import * as Yup from 'yup';
@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import MyInput from '../AuthScreen/MyInput';
 import { COLORS } from '../../constants';
 import MyButton from '../AuthScreen/MyButton';
+import { onLogin } from '../../services/UserService';
 
 const loginYupSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email format').required('Required!'),
@@ -16,8 +17,20 @@ const loginYupSchema = Yup.object().shape({
 
 const FormLogin = () => {
   const navigation = useNavigation();
-  const handleLogin = (values:FormikValues) => {
-    console.log('handleSubmit', values);
+  const handleLogin = async (values: FormikValues) => {
+    try {
+      const res = await onLogin({
+        email: values.email,
+        password: values.password,
+      });
+      if (res.error) {
+        Alert.alert('Error', res.error);
+      } else {
+        navigation.navigate('BottomTabs');
+      }
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
   };
   const handleGoToSignUp = () => {
     navigation.navigate('Register');
