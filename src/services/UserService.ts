@@ -28,6 +28,7 @@ const onLogin = async ({ email, password }:UserRegister) :Promise<Response> => {
   if (!res.error) {
     const decoded = jwtDecode<JwtPayload>(res.response);
     await AsyncStorage.setItem(CONSTANTS.ID_USER, decoded.id);
+    await AsyncStorage.setItem(CONSTANTS.USER_INFO, JSON.stringify(decoded));
   }
   return res;
 };

@@ -2,6 +2,7 @@ const CONSTANTS = {
   TOKEN_KEY: 'token',
   ID_USER: 'idUser',
   IS_LOGIN: 'isLogin',
+  USER_INFO: 'userInfo',
 };
 export const COLORS = {
   primary: '#f7941d',

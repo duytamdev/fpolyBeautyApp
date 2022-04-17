@@ -21,7 +21,6 @@ export interface IPin {
 }
 
 const MasonryList = ({ pins, refreshing, onRefresh }: IMasonryList) => {
-  console.log('MasonryList');
   const WIDTH = useWindowDimensions().width;
   // get num Columns with different width device
   const numColumns = Math.ceil(WIDTH / 200);
@@ -52,7 +51,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    marginTop: 20,
     flexDirection: 'row',
     backgroundColor: '#fff',
   },
