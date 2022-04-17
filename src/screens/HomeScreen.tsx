@@ -28,7 +28,6 @@ const HomeScreen = () => {
           {
             pinList.length > 0 && (
                   <MasonryList pins={pinList} onRefresh={onRefresh} refreshing={refreshing} />
-
             )
           }
         </View>
@@ -36,7 +35,6 @@ const HomeScreen = () => {
 };
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 20,
     flex: 1,
     backgroundColor: '#fff',
   },

@@ -7,7 +7,7 @@ import Pin from '../Pin';
 
 interface IMasonryList {
     pins: {
-        id: string;
+        _id: string;
         imageUrl: string;
         title: string;
     }[];
@@ -15,7 +15,7 @@ interface IMasonryList {
     onRefresh?: () => void;
 }
 export interface IPin {
-    id: string;
+    _id: string;
     imageUrl: string;
     title: string;
 }
@@ -37,7 +37,7 @@ const MasonryList = ({ pins, refreshing, onRefresh }: IMasonryList) => {
                         {pins
                           .filter((item: any, index: number) => index % numColumns === columnIndex)
                           .map((pin) => (
-                                <Pin pin={pin} key={pin.id} />
+                                <Pin pin={pin} key={pin._id} />
                           ))}
                     </View>
                 ))}

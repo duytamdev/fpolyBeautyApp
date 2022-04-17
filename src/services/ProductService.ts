@@ -9,4 +9,7 @@ interface Pin{
 const onSubmitPin = async (pin: Pin) => (axiosInstance.post('/create-pin', pin));
 const onGetAllPins = async () => (axiosInstance.get('/get-all-pins'));
 const onGetPinsByUser = async (userId: string) => (axiosInstance.get(`/get-all-pins-by-user/${userId}`));
-export { onSubmitPin, onGetAllPins, onGetPinsByUser };
+const onGetPinById = async (pinId: string) => (axiosInstance.get(`/get-pin-by-id/${pinId}`));
+export {
+  onSubmitPin, onGetAllPins, onGetPinsByUser, onGetPinById,
+};

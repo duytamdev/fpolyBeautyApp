@@ -48,7 +48,7 @@ const CreatePinScreen = () => {
     if (imagePicker != null) {
       // @ts-ignore
       formData.append('image', imagePicker);
-      await fetch('http://192.168.1.7:3000/api/upload-image', {
+      await fetch(`${CONSTANTS.HOST}/upload-image`, {
         method: 'POST',
         body: formData,
         headers: {
@@ -93,20 +93,6 @@ const CreatePinScreen = () => {
   };
   return (
         <View style={styles.container}>
-            {/* <Button title={'Select image'} onPress={pickImage}/> */}
-            {/* { */}
-            {/*    imagePicker */}
-            {/*    && <> */}
-            {/*      <Image style={styles.image} source={{ uri: imagePicker.uri }}/> */}
-            {/*      <View style={styles.textInput}> */}
-            {/*        <TextInput value={title} onChangeText={(value) => setTitle(value)} placeholder={'Title'}/> */}
-            {/*      </View> */}
-            {/*      <View style={styles.textInput}> */}
-            {/*        <TextInput value={description} onChangeText={(value) => setDescription(value)} placeholder={'Description'}/> */}
-            {/*      </View> */}
-            {/*      <Button title={'Submit pin'} onPress={handleSubmitPin}/> */}
-            {/*    </> */}
-            {/* } */}
           <View style={styles.imagePickerContainer}>
             <Image style={styles.image} source={{ uri: imagePicker ? imagePicker.uri : 'https://c03uk1vc.cloudimg.io/width/600/q60/https://static.wapmaker.net/5bc74209fce1810870a2ca73/2/trang%20phong%20thuy.jpg' }}/>
             <TouchableOpacity onPress={pickImage} style={styles.btnPickImage}>
@@ -166,6 +152,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    paddingHorizontal: 16,
     paddingTop: 20,
     backgroundColor: '#fff',
   },

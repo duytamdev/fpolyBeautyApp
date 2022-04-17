@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { IPin } from './HomeScreen/MasonryList';
 
 const Pin = (props: { pin: IPin }) => {
-  const { imageUrl, title, id } = props.pin;
+  const { imageUrl, title, _id } = props.pin;
   const [isLiked, setIsLiked] = useState(false);
   const [ratio, setRatio] = useState(1);
   const navigation = useNavigation();
@@ -23,7 +23,7 @@ const Pin = (props: { pin: IPin }) => {
   };
   const goToPinPage = () => {
     // @ts-ignore
-    navigation.navigate('Pin', { id });
+    navigation.navigate('DetailsPin', { _id });
   };
   return (
         <TouchableOpacity onPress={goToPinPage} style={styles.pin}>
