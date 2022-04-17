@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import {
-  Text, View, StyleSheet, Image, Button, TextInput,
+  Text, View, StyleSheet, Image, Button, TextInput, Alert,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import { onSubmitPin } from '../services/ProductService';
+import CONSTANTS from '../constants';
 
 // eslint-disable-next-line no-redeclare
 interface ImagePicker{
@@ -16,6 +20,7 @@ interface Pin{
   description: string,
 }
 const CreatePinScreen = () => {
+  const navigation = useNavigation();
   const [imagePicker, setImagePicker] = useState<ImagePicker|undefined>(undefined);
   const [pin, setPin] = useState<Pin>();
   const [title, setTitle] = useState('');
@@ -37,10 +42,11 @@ const CreatePinScreen = () => {
   };
   const handleUploadImage = async () => {
     const formData = new FormData();
+    let responseUrl = null;
     if (imagePicker != null) {
       // @ts-ignore
       formData.append('image', imagePicker);
-      await fetch('http://192.168.1.4:3000/api/upload-image', {
+      await fetch('http://192.168.1.7:3000/api/upload-image', {
         method: 'POST',
         body: formData,
         headers: {
@@ -49,12 +55,39 @@ const CreatePinScreen = () => {
       })
         .then((response) => response.json())
         .then((res) => {
-          console.log('ok', res);
+          responseUrl = res.response.secure_url;
         })
         .catch((e) => {
           console.log('error', e);
         });
     }
+    return responseUrl;
+  };
+  const handleSubmitPin = async () => {
+    const imageUrl = await handleUploadImage();
+    const owner = await AsyncStorage.getItem(CONSTANTS.ID_USER);
+    if (imageUrl == null || owner == null) {
+      Alert.alert('Error', 'Please add a picture');
+      return;
+    }
+    const res = await onSubmitPin({
+      title,
+      imageUrl,
+      description,
+      owner,
+    });
+    if (!res.error) {
+      navigation.navigate('Home');
+      handleClearForm();
+    } else {
+      Alert.alert('Error', res.error);
+    }
+  };
+  const handleClearForm = () => {
+    setImagePicker(undefined);
+    setPin(undefined);
+    setTitle('');
+    setDescription('');
   };
   return (
         <View style={styles.container}>
@@ -70,7 +103,7 @@ const CreatePinScreen = () => {
                   <View style={styles.textInput}>
                     <TextInput value={description} onChangeText={(value) => setDescription(value)} placeholder={'Description'}/>
                   </View>
-                  <Button title={'Submit pin'} onPress={handleUploadImage}/>
+                  <Button title={'Submit pin'} onPress={handleSubmitPin}/>
                 </>
             }
 
