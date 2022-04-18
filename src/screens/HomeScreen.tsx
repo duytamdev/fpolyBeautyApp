@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { onGetAllPins } from '../services/ProductService';
 import MasonryList from '../components/HomeScreen/MasonryList';
+import { COLORS } from '../constants';
 
 const HomeScreen = () => {
   const [pinList, setPinList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(false);
   const fetchPins = async () => {
     try {
       const pins = await onGetAllPins();
@@ -15,7 +17,10 @@ const HomeScreen = () => {
     }
   };
   useEffect(() => {
-    fetchPins().then();
+    setLoading(true);
+    fetchPins().then(() => {
+      setLoading(false);
+    });
   }, []);
   const onRefresh = () => {
     setRefreshing(true);
@@ -24,10 +29,19 @@ const HomeScreen = () => {
   return (
         <View style={styles.container}>
           {
-            pinList.length > 0 && (
-                  <MasonryList pins={pinList} onRefresh={onRefresh} refreshing={refreshing} />
+            loading ? (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                  <ActivityIndicator size="small" color={COLORS.primary} />
+                </View>
+            ) : (
+                <>
+                  {
+                    // eslint-disable-next-line max-len
+                    pinList.length > 0 && (<MasonryList pins={pinList} onRefresh={onRefresh} refreshing={refreshing} />)
+                  }
+                </>
             )
           }
+
         </View>
   );
 };

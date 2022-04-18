@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-  View,
+  View, ActivityIndicator,
 } from 'react-native';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -28,12 +28,17 @@ interface Pin{
   title?:string;
   description?:string;
   imageUrl:string;
+  owner:{
+    avatarUrl:string;
+    name:string;
+  }
 }
 const DetailsPin = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const pinId = route.params?._id;
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+  const [loading, setLoading] = useState(false);
 
   const [pin, setPin] = useState<Pin>({} as Pin);
   const [ratio, setRatio] = useState(1);
@@ -58,8 +63,10 @@ const DetailsPin = () => {
     navigation.goBack();
   };
   useEffect(() => {
+    setLoading(true);
     onGetPinById(pinId).then((res) => {
       setPin(res.response);
+      setLoading(false);
     });
   }, []);
   useEffect(() => {
@@ -67,26 +74,36 @@ const DetailsPin = () => {
       Image.getSize(pin.imageUrl, (width, height) => setRatio(width / height));
     }
   }, [pin.imageUrl]);
+  console.log(pin);
   return (
       <SafeAreaView style={{ backgroundColor: '#fff' }}>
-        {pin && (
-            <ScrollView style={styles.container}>
-              <View style={{ position: 'relative' }}>
-                <Image
-                    source={{ uri: pin.imageUrl }}
-                    style={[styles.image, { aspectRatio: ratio }]}
-                />
-                <TouchableOpacity
-                    onPress={handleDownloadImage}
-                    style={[styles.btnDownload, { top: insets.top + 20 }]}
-                >
-                  <Feather name="download" size={24} color="white" />
-                </TouchableOpacity>
-              </View>
-            <SectionAuthor/>
-              <SectionInfo title={pin.title} description={pin.description}/>
-            </ScrollView>
-        )}
+        {
+          loading ? (<View style={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color={COLORS.primary} />
+              </View>)
+            : (
+                  <>
+                    {pin && (
+                        <ScrollView style={styles.container}>
+                          <View style={{ position: 'relative' }}>
+                            <Image
+                                source={{ uri: pin.imageUrl }}
+                                style={[styles.image, { aspectRatio: ratio }]}
+                            />
+                            <TouchableOpacity
+                                onPress={handleDownloadImage}
+                                style={[styles.btnDownload, { top: insets.top + 20 }]}
+                            >
+                              <Feather name="download" size={24} color="white" />
+                            </TouchableOpacity>
+                          </View>
+                          {pin.owner && <SectionAuthor owner={{ name: pin.owner.name, avatarUrl: pin.owner.avatarUrl }}/>}
+                          <SectionInfo title={pin.title} description={pin.description}/>
+                        </ScrollView>
+                    )}
+                  </>
+            )
+        }
 
         {/* absolute buttons */}
         <TouchableOpacity

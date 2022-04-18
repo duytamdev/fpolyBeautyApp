@@ -4,22 +4,31 @@ import {
 } from 'react-native';
 import { COLORS } from '../../constants';
 
-const SectionAuthor = () => (
-        <View style={styles.authorContainer}>
-            <View style={styles.authorSectionLeft}>
-                <Image source={{ uri: 'https://i.pravatar.cc/300' }} style={styles.avatar} />
-                <View style={styles.infoAuthor}>
-                    <Text style={{ color: COLORS.black, fontWeight: '700', fontSize: 14 }} numberOfLines={2}>Nguyen Duy Tam</Text>
-                    <Text>1000 người theo dõi</Text>
+interface Props {
+    owner?:{
+        name:string,
+        avatarUrl:string,
+    }
+}
+const SectionAuthor = ({ owner }:Props) => {
+  console.log(owner);
+  return (
+            <View style={styles.authorContainer}>
+                <View style={styles.authorSectionLeft}>
+                    <Image source={{ uri: owner?.avatarUrl }} style={styles.avatar} />
+                    <View style={styles.infoAuthor}>
+                        <Text style={{ color: COLORS.black, fontWeight: '700', fontSize: 14 }} numberOfLines={2}>{owner.name}</Text>
+                        <Text>1000 người theo dõi</Text>
+                    </View>
+                </View>
+                <View style={styles.authorSectionRight}>
+                    <TouchableOpacity style={styles.btnFollow}>
+                        <Text style={{ color: COLORS.black, fontWeight: '700' }}>Theo dõi</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
-            <View style={styles.authorSectionRight}>
-                <TouchableOpacity style={styles.btnFollow}>
-                    <Text style={{ color: COLORS.black, fontWeight: '700' }}>Theo dõi</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-);
+  );
+};
 const styles = StyleSheet.create({
   btnFollow: {
     backgroundColor: COLORS.gray_border,

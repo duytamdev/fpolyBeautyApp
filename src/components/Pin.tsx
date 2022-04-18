@@ -39,7 +39,7 @@ const Pin = (props: { pin: IPin }) => {
                     />
                 </TouchableOpacity>
             </View>
-            {title && (
+            {title.length > 0 && (
                 <Text numberOfLines={3} style={styles.title}>
                     {title}
                 </Text>

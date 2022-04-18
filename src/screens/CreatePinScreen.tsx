@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import {
   Text, View, StyleSheet, Image, Button, TextInput, Alert,
@@ -23,7 +23,7 @@ interface Pin{
 }
 const CreatePinScreen = () => {
   const navigation = useNavigation();
-  const [imagePicker, setImagePicker] = useState<ImagePicker|undefined>(undefined);
+  const [imagePicker, setImagePicker] = useState<ImagePicker|undefined|null>(null);
   const [pin, setPin] = useState<Pin>();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -65,6 +65,12 @@ const CreatePinScreen = () => {
     }
     return responseUrl;
   };
+  const handleClearForm = () => {
+    setImagePicker(null);
+    setPin(undefined);
+    setTitle('');
+    setDescription('');
+  };
   const handleSubmitPin = async () => {
     const imageUrl = await handleUploadImage();
     const owner = await AsyncStorage.getItem(CONSTANTS.ID_USER);
@@ -79,18 +85,17 @@ const CreatePinScreen = () => {
       owner,
     });
     if (!res.error) {
-      navigation.navigate('Home');
       handleClearForm();
+      navigation.navigate('Home');
     } else {
       Alert.alert('Error', res.error);
     }
   };
-  const handleClearForm = () => {
-    setImagePicker(undefined);
-    setPin(undefined);
-    setTitle('');
-    setDescription('');
-  };
+
+  useEffect(() => () => {
+    handleClearForm();
+  }, []);
+
   return (
         <View style={styles.container}>
           <View style={styles.imagePickerContainer}>
