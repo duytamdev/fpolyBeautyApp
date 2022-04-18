@@ -13,9 +13,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/core';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import CONSTANTS from '../constants';
+import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
+import { useDispatch } from 'react-redux';
+import CONSTANTS, { COLORS } from '../constants';
 import { onGetPinsByUser } from '../services/ProductService';
 import MasonryList from '../components/HomeScreen/MasonryList';
+import { logoutSaveState } from '../redux/actions/authAction';
 
 interface IUserinfo {
   id: string;
@@ -26,10 +29,19 @@ interface IUserinfo {
 
 const AccountScreen = () => {
   const insets = useSafeAreaInsets();
-
+  const navigation = useNavigation();
   const [userInfo, setUserInfo] = useState<IUserinfo>({} as IUserinfo);
   const [pinsOfUser, setPinsOfUser] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [visibleOptions, setVisibleOptions] = useState(false);
+  const dispatch = useDispatch();
+  const hideMenu = () => setVisibleOptions(false);
+  const showMenu = () => setVisibleOptions(true);
+  const handleLogout = () => {
+    dispatch(logoutSaveState(false));
+    navigation.replace('Auth');
+    hideMenu();
+  };
   const getUserIndfo = async () => {
     try {
       const value = await AsyncStorage.getItem(CONSTANTS.USER_INFO);
@@ -85,11 +97,27 @@ const AccountScreen = () => {
                                 />
                             </TouchableOpacity>
 
-                            <Entypo
-                                style={styles.icon}
-                                name={'dots-three-horizontal'}
-                                color={'#000'}
-                            />
+                             {/* <Entypo */}
+                             {/*   style={styles.icon} */}
+                             {/*   name={'dots-three-horizontal'} */}
+                             {/*   color={'#000'} */}
+                             {/* /> */}
+                          <Menu
+                              visible={visibleOptions}
+                              anchor={ <Entypo
+                                  onPress={showMenu}
+                                  style={styles.icon}
+                                  name={'dots-three-horizontal'}
+                                  color={'#000'}
+                              /> }
+                              onRequestClose={hideMenu}
+                          >
+                            <MenuItem onPress={hideMenu}>Cập nhật ảnh đại diện</MenuItem>
+                            <MenuDivider />
+                            <MenuItem onPress={handleLogout}>
+                              <Text style={{ color: COLORS.error }}>Đăng xuất</Text>
+                            </MenuItem>
+                          </Menu>
                         </View>
                         <Image
                             style={styles.image}

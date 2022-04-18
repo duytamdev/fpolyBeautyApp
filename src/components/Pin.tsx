@@ -11,7 +11,6 @@ const Pin = (props: { pin: IPin }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [ratio, setRatio] = useState(1);
   const navigation = useNavigation();
-  console.log(props.pin);
   useEffect(() => {
     if (imageUrl) {
       Image.getSize(imageUrl, (width, height) => setRatio(width / height));

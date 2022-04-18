@@ -5,10 +5,12 @@ import {
 import { Formik, FormikValues } from 'formik';
 import * as Yup from 'yup';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 import MyInput from '../AuthScreen/MyInput';
 import { COLORS } from '../../constants';
 import MyButton from '../AuthScreen/MyButton';
 import { onLogin } from '../../services/UserService';
+import { loginSaveState } from '../../redux/actions/authAction';
 
 const loginYupSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email format').required('Required!'),
@@ -17,6 +19,7 @@ const loginYupSchema = Yup.object().shape({
 
 const FormLogin = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const handleLogin = async (values: FormikValues) => {
     try {
       const res = await onLogin({
@@ -26,6 +29,8 @@ const FormLogin = () => {
       if (res.error) {
         Alert.alert('Error', res.error);
       } else {
+        // save state login
+        dispatch(loginSaveState(true));
         navigation.navigate('BottomTabs');
       }
     } catch (error) {

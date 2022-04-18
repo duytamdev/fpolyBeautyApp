@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { onGetAllPins } from '../services/ProductService';
-import Pin from '../components/Pin';
 import MasonryList from '../components/HomeScreen/MasonryList';
 
 const HomeScreen = () => {
   const [pinList, setPinList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-
   const fetchPins = async () => {
     try {
       const pins = await onGetAllPins();
