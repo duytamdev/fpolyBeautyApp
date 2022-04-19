@@ -168,6 +168,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     width: '40%',
     borderRadius: 200,
+    resizeMode: 'cover',
   },
   container: {
     flex: 1,

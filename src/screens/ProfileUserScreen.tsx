@@ -7,6 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import ProgressDialog from 'react-native-progress-dialog';
 import { IUserinfo } from './AccountScreen';
 import CONSTANTS, { COLORS } from '../constants';
 import { onUpdateInfo } from '../services/UserService';
@@ -15,11 +16,12 @@ import { IImagePicker } from './CreatePinScreen';
 export interface PropsUser{
   id: string;
   name: string;
-  imagePicker?: string;
+  imagePicker?: any;
 }
 
 const Header = ({ name, imagePicker, id }:PropsUser) => {
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleUploadImage = async () => {
     const formData = new FormData();
@@ -45,7 +47,14 @@ const Header = ({ name, imagePicker, id }:PropsUser) => {
     return responseUrl;
   };
   const handleUpdateInfo = async () => {
-    const avatarUrl = await handleUploadImage();
+    setIsLoading(true);
+    let avatarUrl;
+    console.log(typeof imagePicker);
+    if (typeof imagePicker === 'string') {
+      avatarUrl = imagePicker;
+    } else {
+      avatarUrl = await handleUploadImage();
+    }
     const data = {
       id,
       name,
@@ -60,15 +69,25 @@ const Header = ({ name, imagePicker, id }:PropsUser) => {
       .catch((e) => {
         console.log(e);
       });
+    setIsLoading(false);
   };
+  useEffect(() => () => {
+    setIsLoading(false);
+  }, []);
+
   return (
-      <View style={styles.header}>
-        <Ionicons name="chevron-back" size={26} color="black" />
-        <Text style={{ fontSize: 16, textAlign: 'center' }}>Thông tin cá nhân</Text>
-        <TouchableOpacity onPress={handleUpdateInfo} style={styles.btnUpdate}>
-          <Text style={{ color: '#fff' }}>Xong</Text>
-        </TouchableOpacity>
-      </View>
+      <>
+        <ProgressDialog loaderColor={COLORS.primary} label={'Vui lòng chờ...'} visible={isLoading} />
+        <View style={styles.header}>
+
+          <Ionicons onPress={() => navigation.goBack()} name="chevron-back" size={26} color="black" />
+          <Text style={{ fontSize: 16, textAlign: 'center' }}>Thông tin cá nhân</Text>
+          <TouchableOpacity onPress={handleUpdateInfo} style={styles.btnUpdate}>
+            <Text style={{ color: '#fff' }}>Xong</Text>
+          </TouchableOpacity>
+        </View>
+      </>
+
   );
 };
 const ProfileUserScreen = () => {
@@ -111,11 +130,15 @@ const ProfileUserScreen = () => {
             {
                 userInfo && (
                     <>
-                      <Header imagePicker={imagePicker} name={newName} id={userInfo.id}/>
-
+                      <Header
+                          imagePicker={imagePicker || userInfo.avatarUrl}
+                          name={newName}
+                          id={userInfo.id}/>
                       <View style={styles.content}>
                         <TouchableOpacity onPress={pickImage} style={styles.avatarContainer}>
-                          <Image style={styles.avatar} source={{ uri: (imagePicker != null) ? imagePicker?.uri : userInfo.avatarUrl }}/>
+                          <Image
+                              style={styles.avatar}
+                              source={{ uri: (imagePicker != null) ? imagePicker?.uri : userInfo.avatarUrl }}/>
                           <View style={{
                             backgroundColor: 'rgba(0,0,0,0.2)',
                             alignItems: 'center',
@@ -180,6 +203,8 @@ const styles = StyleSheet.create({
     width: '40%',
     aspectRatio: 1,
     borderRadius: 100,
+    resizeMode: 'cover',
+
   },
   avatarContainer: {
     position: 'relative',
