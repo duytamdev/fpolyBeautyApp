@@ -4,11 +4,14 @@ import { Fontisto, FontAwesome5 } from '@expo/vector-icons';
 import HomeScreen from '../screens/HomeScreen';
 import CreatePinScreen from '../screens/CreatePinScreen';
 import AccountScreen from '../screens/AccountScreen';
+import { COLORS } from '../constants';
 
 const Tab = createBottomTabNavigator();
 const BottomTabs = () => (
       <Tab.Navigator screenOptions={{
         headerShown: false,
+        tabBarActiveTintColor: COLORS.primary,
+
       }}>
           <Tab.Screen name="Home" component={HomeScreen} options={{
             tabBarIcon: ({ color, size }) => (

@@ -11,7 +11,7 @@ import CONSTANTS, { COLORS } from '../constants';
 import MyButton from '../components/AuthScreen/MyButton';
 
 // eslint-disable-next-line no-redeclare
-interface ImagePicker{
+export interface IImagePicker{
   uri: string,
   name: string,
   type: 'image/jpg',
@@ -23,7 +23,7 @@ interface Pin{
 }
 const CreatePinScreen = () => {
   const navigation = useNavigation();
-  const [imagePicker, setImagePicker] = useState<ImagePicker|undefined|null>(null);
+  const [imagePicker, setImagePicker] = useState<IImagePicker|undefined|null>(null);
   const [pin, setPin] = useState<Pin>();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');

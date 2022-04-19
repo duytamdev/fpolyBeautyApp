@@ -2,6 +2,7 @@ import jwtDecode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../config/axios';
 import CONSTANTS from '../constants';
+import { PropsUser } from '../screens/ProfileUserScreen';
 
 interface UserRegister {
   email: string;
@@ -32,4 +33,21 @@ const onLogin = async ({ email, password }:UserRegister) :Promise<Response> => {
   }
   return res;
 };
-export { onRegister, onLogin };
+const onUpdateInfo = async (data:any) => {
+  const res = await axiosInstance.put(`/update-user-info/${data.id}`, data);
+  // get value in AsyncStorage
+  try {
+    const value = await AsyncStorage.getItem(CONSTANTS.USER_INFO);
+    let newValue;
+    if (value !== null) {
+      // update value in AsyncStorage
+      newValue = { ...JSON.parse(value), name: data.name, avatarUrl: data.avatarUrl };
+      await AsyncStorage.setItem(CONSTANTS.USER_INFO, JSON.stringify(newValue));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  // save AsyncStorage
+  return res;
+};
+export { onRegister, onLogin, onUpdateInfo };

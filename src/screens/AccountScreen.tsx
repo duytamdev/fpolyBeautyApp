@@ -20,7 +20,7 @@ import { onGetPinsByUser } from '../services/ProductService';
 import MasonryList from '../components/HomeScreen/MasonryList';
 import { logoutSaveState } from '../redux/actions/authAction';
 
-interface IUserinfo {
+export interface IUserinfo {
   id: string;
   avatarUrl: string;
   name: string;
@@ -42,7 +42,7 @@ const AccountScreen = () => {
     navigation.replace('Auth');
     hideMenu();
   };
-  const getUserIndfo = async () => {
+  const getUserInfo = async () => {
     try {
       const value = await AsyncStorage.getItem(CONSTANTS.USER_INFO);
       if (value !== null) {
@@ -63,14 +63,26 @@ const AccountScreen = () => {
     getPinsUser(userInfo.id).then();
     setRefreshing(false);
   };
+  const goToUpdateScreen = () => {
+    navigation.navigate('ProfileUser');
+    hideMenu();
+  };
   useEffect(() => {
-    getUserIndfo().then();
+    getUserInfo().then();
   }, []);
   useEffect(() => {
     if (userInfo.id) {
       getPinsUser(userInfo.id).then();
     }
   }, [userInfo]);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // do something
+      getUserInfo().then();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
   return (
         <ScrollView
             style={styles.root}
@@ -96,12 +108,6 @@ const AccountScreen = () => {
                                     colors={'#000'}
                                 />
                             </TouchableOpacity>
-
-                             {/* <Entypo */}
-                             {/*   style={styles.icon} */}
-                             {/*   name={'dots-three-horizontal'} */}
-                             {/*   color={'#000'} */}
-                             {/* /> */}
                           <Menu
                               visible={visibleOptions}
                               anchor={ <Entypo
@@ -112,7 +118,7 @@ const AccountScreen = () => {
                               /> }
                               onRequestClose={hideMenu}
                           >
-                            <MenuItem onPress={hideMenu}>Cập nhật ảnh đại diện</MenuItem>
+                            <MenuItem onPress={goToUpdateScreen}>Cập nhật thông tin</MenuItem>
                             <MenuDivider />
                             <MenuItem onPress={handleLogout}>
                               <Text style={{ color: COLORS.error }}>Đăng xuất</Text>
