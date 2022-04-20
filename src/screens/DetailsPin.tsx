@@ -11,14 +11,12 @@ import {
 } from 'react-native';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-
-import { StatusBar } from 'expo-status-bar';
+import ProgressDialog from 'react-native-progress-dialog';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
-import { requestPermissionsAsync } from 'expo-media-library';
-import { onGetPinById, onGetPinsByUser } from '../services/ProductService';
+import { onGetPinById } from '../services/ProductService';
 import { COLORS } from '../constants';
 import SectionAuthor from '../components/DetailsPin/SectionAuthor';
 import SectionInfo from '../components/DetailsPin/SectionInfo';
@@ -37,24 +35,38 @@ const DetailsPin = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const pinId = route.params?._id;
-  const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+  // const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const [loading, setLoading] = useState(false);
-
+  const [loadingDownload, setLoadingDownload] = useState(false);
   const [pin, setPin] = useState<Pin>({} as Pin);
   const [ratio, setRatio] = useState(1);
   const insets = useSafeAreaInsets();
+  const getPermissionAsync = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Sorry, we need camera roll permissions to make this work!');
+    }
+  };
   const handleDownloadImage = async () => {
-    await requestPermissionsAsync();
     const uri = pin.imageUrl;
-    // eslint-disable-next-line no-underscore-dangle
-    const fileUri = `${FileSystem.documentDirectory}${pin._id}.jpg`;
-    FileSystem.downloadAsync(uri, fileUri)
-      .then(async ({ uri }) => {
-        await MediaLibrary.createAssetAsync(uri);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    await getPermissionAsync();
+    setLoadingDownload(true);
+    try {
+      const localuri = await FileSystem.downloadAsync(
+        pin.imageUrl,
+        `${FileSystem.documentDirectory}${pin._id}.jpg`,
+      );
+      const asset = await MediaLibrary.createAssetAsync(localuri.uri);
+      const album = await MediaLibrary.getAlbumAsync('Download');
+      if (album == null) {
+        await MediaLibrary.createAlbumAsync('Download', asset, false);
+      } else {
+        await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    setLoadingDownload(false);
     Alert.alert('Hình ảnh đã được tải về thành công');
   };
   const goBack = () => {
@@ -72,10 +84,18 @@ const DetailsPin = () => {
       Image.getSize(pin.imageUrl, (width, height) => setRatio(width / height));
     }
   }, [pin.imageUrl]);
+
+  useEffect(() => () => {
+    setLoadingDownload(false);
+  }, []);
+
   return (
       <SafeAreaView style={{ backgroundColor: '#fff' }}>
+        <ProgressDialog loaderColor={COLORS.primary} label={'Đang tải...'} visible={loadingDownload} />
         {
-          loading ? (<View style={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+          loading ? (<View style={{
+            height: '100%', justifyContent: 'center', alignItems: 'center',
+          }}>
             <ActivityIndicator size="large" color={COLORS.primary} />
               </View>)
             : (
