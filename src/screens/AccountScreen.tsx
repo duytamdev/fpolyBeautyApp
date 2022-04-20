@@ -91,66 +91,68 @@ const AccountScreen = () => {
     setLoading(false);
   }, []);
   return (
-        <ScrollView
-            style={styles.root}
-            showsVerticalScrollIndicator={false}
-            refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-        >
-          {loading && (<AccountLoader/>)}
-            {userInfo && (
-                <>
-                    <View
-                        style={[
-                          styles.container,
-                          { paddingTop: insets.top + 18 },
-                        ]}
-                    >
-                        <View style={styles.icons}>
-                            <TouchableOpacity>
-                                <Feather
-                                    style={styles.icon}
-                                    name="share"
-                                    size={24}
-                                    colors={'#000'}
-                                />
-                            </TouchableOpacity>
-                          <Menu
-                              visible={visibleOptions}
-                              anchor={ <Entypo
-                                  onPress={showMenu}
-                                  style={styles.icon}
-                                  name={'dots-three-horizontal'}
-                                  color={'#000'}
-                              /> }
-                              onRequestClose={hideMenu}
-                          >
-                            <MenuItem onPress={goToUpdateScreen}>Cập nhật thông tin</MenuItem>
-                            <MenuDivider />
-                            <MenuItem onPress={handleLogout}>
-                              <Text style={{ color: COLORS.error }}>Đăng xuất</Text>
-                            </MenuItem>
-                          </Menu>
-                        </View>
-                        <Image
-                            style={styles.image}
-                            source={{ uri: userInfo.avatarUrl }}
-                        />
-                        <Text style={styles.title}>{userInfo.name}</Text>
-                        <Text style={styles.subTitle}>
-                            1200 followers | 50 followings
-                        </Text>
-                    </View>
-                  {
-                    pinsOfUser.length > 0 && (
-                          <MasonryList pins={pinsOfUser} />
-                    )
-                  }
-                    {/* {userInfo.pins && <MasonryList pins={userInfo.pins} />} */}
-                </>
-            )}
-        </ScrollView>
+       <>
+         {loading && (<AccountLoader/>)}
+         <ScrollView
+             style={styles.root}
+             showsVerticalScrollIndicator={false}
+             refreshControl={
+               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+             }
+         >
+           {userInfo && (
+               <>
+                 <View
+                     style={[
+                       styles.container,
+                       { paddingTop: insets.top + 18 },
+                     ]}
+                 >
+                   <View style={styles.icons}>
+                     <TouchableOpacity>
+                       <Feather
+                           style={styles.icon}
+                           name="share"
+                           size={24}
+                           colors={'#000'}
+                       />
+                     </TouchableOpacity>
+                     <Menu
+                         visible={visibleOptions}
+                         anchor={ <Entypo
+                             onPress={showMenu}
+                             style={styles.icon}
+                             name={'dots-three-horizontal'}
+                             color={'#000'}
+                         /> }
+                         onRequestClose={hideMenu}
+                     >
+                       <MenuItem onPress={goToUpdateScreen}>Cập nhật thông tin</MenuItem>
+                       <MenuDivider />
+                       <MenuItem onPress={handleLogout}>
+                         <Text style={{ color: COLORS.error }}>Đăng xuất</Text>
+                       </MenuItem>
+                     </Menu>
+                   </View>
+                   <Image
+                       style={styles.image}
+                       source={{ uri: userInfo.avatarUrl }}
+                   />
+                   <Text style={styles.title}>{userInfo.name}</Text>
+                   <Text style={styles.subTitle}>
+                     1200 followers | 50 followings
+                   </Text>
+                 </View>
+                 {
+                     pinsOfUser.length > 0 && (
+                         <MasonryList pins={pinsOfUser} />
+                     )
+                 }
+                 {/* {userInfo.pins && <MasonryList pins={userInfo.pins} />} */}
+               </>
+           )}
+         </ScrollView>
+       </>
   );
 };
 const styles = StyleSheet.create({
