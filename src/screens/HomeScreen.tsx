@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import {
+  View, StyleSheet,
+} from 'react-native';
 import { onGetAllPins } from '../services/ProductService';
 import MasonryList from '../components/HomeScreen/MasonryList';
-import { COLORS } from '../constants';
+import MyContentLoader from '../components/HomeScreen/MyContentLoader';
 
 const HomeScreen = () => {
   const [pinList, setPinList] = useState([]);
@@ -28,10 +30,8 @@ const HomeScreen = () => {
   };
   return (
         <View style={styles.container}>
-          {
-            loading ? (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                  <ActivityIndicator size="small" color={COLORS.primary} />
-                </View>
+           {
+            loading ? (<MyContentLoader/>
             ) : (
                 <>
                   {
@@ -40,7 +40,7 @@ const HomeScreen = () => {
                   }
                 </>
             )
-          }
+           }
 
         </View>
   );

@@ -10,9 +10,7 @@ interface Props {
         avatarUrl:string,
     }
 }
-const SectionAuthor = ({ owner }:Props) => {
-  console.log(owner);
-  return (
+const SectionAuthor = ({ owner }:Props) => (
             <View style={styles.authorContainer}>
                 <View style={styles.authorSectionLeft}>
                     <Image source={{ uri: owner?.avatarUrl }} style={styles.avatar} />
@@ -27,8 +25,7 @@ const SectionAuthor = ({ owner }:Props) => {
                     </TouchableOpacity>
                 </View>
             </View>
-  );
-};
+);
 const styles = StyleSheet.create({
   btnFollow: {
     backgroundColor: COLORS.gray_border,

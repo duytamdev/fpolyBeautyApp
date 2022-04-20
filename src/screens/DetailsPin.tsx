@@ -45,14 +45,12 @@ const DetailsPin = () => {
   const insets = useSafeAreaInsets();
   const handleDownloadImage = async () => {
     await requestPermissionsAsync();
-    console.log('requestPermission', requestPermission);
     const uri = pin.imageUrl;
     // eslint-disable-next-line no-underscore-dangle
     const fileUri = `${FileSystem.documentDirectory}${pin._id}.jpg`;
     FileSystem.downloadAsync(uri, fileUri)
       .then(async ({ uri }) => {
         await MediaLibrary.createAssetAsync(uri);
-        console.log('Finished downloading to ', fileUri);
       })
       .catch((error) => {
         console.error(error);
@@ -74,7 +72,6 @@ const DetailsPin = () => {
       Image.getSize(pin.imageUrl, (width, height) => setRatio(width / height));
     }
   }, [pin.imageUrl]);
-  console.log(pin);
   return (
       <SafeAreaView style={{ backgroundColor: '#fff' }}>
         {

@@ -9,17 +9,14 @@ import MyInput from '../components/AuthScreen/MyInput';
 import MyButton from '../components/AuthScreen/MyButton';
 import FormLogin from '../components/LoginScreen/FormLogin';
 
-const LoginScreen = () => {
-  console.log('f');
-  return (
+const LoginScreen = () => (
         <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
             <Header title={'Log in to your Account'} sub={'Welcome back, please enter your details.'}/>
             <ButtonGoogle title={'Continue with Google'}/>
             <VerticalLine/>
             <FormLogin/>
         </ScrollView>
-  );
-};
+);
 const styles = StyleSheet.create({
   container: {
     flex: 1,

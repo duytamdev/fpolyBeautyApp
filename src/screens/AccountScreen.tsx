@@ -19,6 +19,7 @@ import CONSTANTS, { COLORS } from '../constants';
 import { onGetPinsByUser } from '../services/ProductService';
 import MasonryList from '../components/HomeScreen/MasonryList';
 import { logoutSaveState } from '../redux/actions/authAction';
+import AccountLoader from '../components/AccountScreen/AccountLoader';
 
 export interface IUserinfo {
   id: string;
@@ -34,6 +35,7 @@ const AccountScreen = () => {
   const [pinsOfUser, setPinsOfUser] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [visibleOptions, setVisibleOptions] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const hideMenu = () => setVisibleOptions(false);
   const showMenu = () => setVisibleOptions(true);
@@ -44,6 +46,7 @@ const AccountScreen = () => {
   };
   const getUserInfo = async () => {
     try {
+      setLoading(true);
       const value = await AsyncStorage.getItem(CONSTANTS.USER_INFO);
       if (value !== null) {
         // We have data!!
@@ -52,6 +55,7 @@ const AccountScreen = () => {
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
   };
   const getPinsUser = async (id:string) => {
     await onGetPinsByUser(id).then((res) => {
@@ -83,6 +87,9 @@ const AccountScreen = () => {
 
     return unsubscribe;
   }, [navigation]);
+  useEffect(() => () => {
+    setLoading(false);
+  }, []);
   return (
         <ScrollView
             style={styles.root}
@@ -91,6 +98,7 @@ const AccountScreen = () => {
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
         >
+          {loading && (<AccountLoader/>)}
             {userInfo && (
                 <>
                     <View

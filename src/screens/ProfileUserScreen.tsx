@@ -49,7 +49,6 @@ const Header = ({ name, imagePicker, id }:PropsUser) => {
   const handleUpdateInfo = async () => {
     setIsLoading(true);
     let avatarUrl;
-    console.log(typeof imagePicker);
     if (typeof imagePicker === 'string') {
       avatarUrl = imagePicker;
     } else {
@@ -60,7 +59,6 @@ const Header = ({ name, imagePicker, id }:PropsUser) => {
       name,
       avatarUrl,
     };
-    console.log(data);
     await onUpdateInfo(data)
       .then(() => {
         ToastAndroid.show('Cập nhật thành công', ToastAndroid.SHORT);
