@@ -1,5 +1,4 @@
 # fpolyBeautyApp
-Resct native app
 
 ## Giới thiệu
 Một ứng dụng giúp bạn có thể lưu trữ, chia sẽ những hình ảnh tuyệt vời của các cô gái trường FPT Polytechnic :))))
