@@ -8,10 +8,10 @@ Một ứng dụng giúp bạn có thể lưu trữ, chia sẽ những hình ả
  - Fronted: React Native
  - Backend: NodeJs & Express
  - Database: MongoDb
- - Server lưa trữ hình ảnh: <a target="_blank" href="https://cloudinary.com">Cloudinary <a/>
+ - Server lưu trữ hình ảnh: <a target="_blank" href="https://cloudinary.com">Cloudinary <a/>
 
 ## Các tính năng nổi bậc
-  - Thêm những hình ảnh trên điện thoại
+  - Thêm những hình ảnh từ điện thoại
   - Download hình ảnh một cách nhanh chóng
   - Chế độ gridview đẹp mắt
   - Tối ưu hoá trải nghiệm người dùng:
