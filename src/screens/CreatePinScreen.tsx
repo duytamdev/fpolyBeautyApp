@@ -10,6 +10,7 @@ import ProgressDialog from 'react-native-progress-dialog';
 import { onSubmitPin } from '../services/ProductService';
 import CONSTANTS, { COLORS } from '../constants';
 import MyButton from '../components/AuthScreen/MyButton';
+import { navigate } from '../navigations/rootNavigator';
 
 // eslint-disable-next-line no-redeclare
 export interface IImagePicker{
@@ -78,6 +79,7 @@ const CreatePinScreen = () => {
     setIsLoading(true);
     const imageUrl = await handleUploadImage();
     const owner = await AsyncStorage.getItem(CONSTANTS.ID_USER);
+    console.log(owner);
     if (imageUrl == null || owner == null) {
       setIsLoading(false);
       Alert.alert('Error', 'Please add a picture');
@@ -91,7 +93,7 @@ const CreatePinScreen = () => {
     });
     if (!res.error) {
       handleClearForm();
-      navigation.navigate('Home');
+      navigate('Home');
     } else {
       Alert.alert('Error', res.error);
     }

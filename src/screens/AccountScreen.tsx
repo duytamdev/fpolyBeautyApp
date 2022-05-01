@@ -20,6 +20,7 @@ import { onGetPinsByUser } from '../services/ProductService';
 import MasonryList from '../components/HomeScreen/MasonryList';
 import { logoutSaveState } from '../redux/actions/authAction';
 import AccountLoader from '../components/AccountScreen/AccountLoader';
+import { navigate } from '../navigations/rootNavigator';
 
 export interface IUserinfo {
   id: string;
@@ -68,7 +69,7 @@ const AccountScreen = () => {
     setRefreshing(false);
   };
   const goToUpdateScreen = () => {
-    navigation.navigate('ProfileUser');
+    navigate('ProfileUser');
     hideMenu();
   };
   useEffect(() => {

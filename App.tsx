@@ -6,12 +6,13 @@ import { Provider } from 'react-redux';
 import RootNavigation from './src/navigations';
 import store from './src/redux/store';
 import SplashScreen from './src/screens/SplashScreen';
+import { navigationRef } from './src/navigations/rootNavigator';
 
 export default function App() {
   return (
       <Provider store={store}>
           <SafeAreaView style={styles.container}>
-              <NavigationContainer>
+              <NavigationContainer ref={navigationRef}>
                   <RootNavigation />
               </NavigationContainer>
               <StatusBar style="auto" />

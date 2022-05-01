@@ -11,6 +11,7 @@ import { COLORS } from '../../constants';
 import MyButton from '../AuthScreen/MyButton';
 import { onLogin } from '../../services/UserService';
 import { loginSaveState } from '../../redux/actions/authAction';
+import { navigate } from '../../navigations/rootNavigator';
 
 const loginYupSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email format').required('Required!'),
@@ -31,14 +32,14 @@ const FormLogin = () => {
       } else {
         // save state login
         dispatch(loginSaveState(true));
-        navigation.navigate('BottomTabs');
+        navigate('BottomTabs');
       }
     } catch (error) {
       Alert.alert('Error', error.message);
     }
   };
   const handleGoToSignUp = () => {
-    navigation.navigate('Register');
+    navigate('Register');
   };
   return (
         <Formik initialValues={{

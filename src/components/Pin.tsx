@@ -5,12 +5,12 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { IPin } from './HomeScreen/MasonryList';
+import { navigate } from '../navigations/rootNavigator';
 
 const Pin = (props: { pin: IPin }) => {
   const { imageUrl, title, _id } = props.pin;
   const [isLiked, setIsLiked] = useState(false);
   const [ratio, setRatio] = useState(1);
-  const navigation = useNavigation();
   useEffect(() => {
     if (imageUrl) {
       Image.getSize(imageUrl, (width, height) => setRatio(width / height));
@@ -22,7 +22,7 @@ const Pin = (props: { pin: IPin }) => {
   };
   const goToPinPage = () => {
     // @ts-ignore
-    navigation.navigate('DetailsPin', { _id });
+    navigate('DetailsPin', { _id });
   };
   return (
         <TouchableOpacity onPress={goToPinPage} style={styles.pin}>
