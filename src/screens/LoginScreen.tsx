@@ -5,8 +5,6 @@ import {
 import Header from '../components/AuthScreen/Header';
 import ButtonGoogle from '../components/AuthScreen/ButtonGoogle';
 import VerticalLine from '../components/AuthScreen/VerticalLine';
-import MyInput from '../components/AuthScreen/MyInput';
-import MyButton from '../components/AuthScreen/MyButton';
 import FormLogin from '../components/LoginScreen/FormLogin';
 
 const LoginScreen = () => (

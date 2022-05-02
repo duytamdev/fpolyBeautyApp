@@ -8,6 +8,7 @@ import { IPin } from './HomeScreen/MasonryList';
 import { navigate } from '../navigations/rootNavigator';
 
 const Pin = (props: { pin: IPin }) => {
+  const navigation = useNavigation();
   const { imageUrl, title, _id } = props.pin;
   const [isLiked, setIsLiked] = useState(false);
   const [ratio, setRatio] = useState(1);
@@ -22,7 +23,7 @@ const Pin = (props: { pin: IPin }) => {
   };
   const goToPinPage = () => {
     // @ts-ignore
-    navigate('DetailsPin', { _id });
+    navigation.navigate('DetailsPin', { _id });
   };
   return (
         <TouchableOpacity onPress={goToPinPage} style={styles.pin}>

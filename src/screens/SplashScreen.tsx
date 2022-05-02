@@ -1,24 +1,16 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import CONSTANTS, { COLORS } from '../constants';
+import { useNavigation } from '@react-navigation/native';
+import { COLORS } from '../constants';
+import RootNavigation from '../navigations';
+import { replace } from '../navigations/rootNavigator';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
   useEffect(() => {
-    const isLogin = async () => {
-      try {
-        const jsonValue = await AsyncStorage.getItem(CONSTANTS.IS_LOGIN);
-        return jsonValue != null ? JSON.parse(jsonValue) : false;
-      } catch (e) {
-        console.log(e);
-      }
-    };
     const timeout = setTimeout(async () => {
-      const logged = await isLogin();
-      await navigation.replace(logged ? 'BottomTabs' : 'Auth');
+      navigation.replace('Root');
     }, 3000);
     return () => {
       clearTimeout(timeout);

@@ -18,9 +18,8 @@ import { useDispatch } from 'react-redux';
 import CONSTANTS, { COLORS } from '../constants';
 import { onGetPinsByUser } from '../services/ProductService';
 import MasonryList from '../components/HomeScreen/MasonryList';
-import { logoutSaveState } from '../redux/actions/authAction';
 import AccountLoader from '../components/AccountScreen/AccountLoader';
-import { navigate } from '../navigations/rootNavigator';
+import { authActions } from '../redux/reducers/authSlice';
 
 export interface IUserinfo {
   id: string;
@@ -41,9 +40,8 @@ const AccountScreen = () => {
   const hideMenu = () => setVisibleOptions(false);
   const showMenu = () => setVisibleOptions(true);
   const handleLogout = () => {
-    dispatch(logoutSaveState(false));
-    navigation.replace('Auth');
-    hideMenu();
+    console.log('logout');
+    dispatch(authActions.logout());
   };
   const getUserInfo = async () => {
     try {
@@ -69,7 +67,7 @@ const AccountScreen = () => {
     setRefreshing(false);
   };
   const goToUpdateScreen = () => {
-    navigate('ProfileUser');
+    navigation.navigate('ProfileUser');
     hideMenu();
   };
   useEffect(() => {
@@ -80,14 +78,14 @@ const AccountScreen = () => {
       getPinsUser(userInfo.id).then();
     }
   }, [userInfo]);
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      // do something
-      getUserInfo().then();
-    });
-
-    return unsubscribe;
-  }, [navigation]);
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     // do something
+  //     getUserInfo().then();
+  //   });
+  //
+  //   return unsubscribe;
+  // }, [navigation]);
   useEffect(() => () => {
     setLoading(false);
   }, []);

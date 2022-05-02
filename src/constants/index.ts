@@ -3,7 +3,7 @@ const CONSTANTS = {
   ID_USER: 'idUser',
   IS_LOGIN: 'isLogin',
   USER_INFO: 'userInfo',
-  HOST: 'http://192.168.1.21:3000/api',
+  HOST: 'http://192.168.1.12:3000/api',
 };
 export const COLORS = {
   primary: '#f7941d',

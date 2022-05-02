@@ -5,13 +5,11 @@ import {
 import { Formik, FormikValues } from 'formik';
 import * as Yup from 'yup';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MyInput from '../AuthScreen/MyInput';
 import { COLORS } from '../../constants';
 import MyButton from '../AuthScreen/MyButton';
-import { onLogin } from '../../services/UserService';
-import { loginSaveState } from '../../redux/actions/authAction';
-import { navigate } from '../../navigations/rootNavigator';
+import { authActions, selectIsLogged } from '../../redux/reducers/authSlice';
 
 const loginYupSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email format').required('Required!'),
@@ -21,25 +19,23 @@ const loginYupSchema = Yup.object().shape({
 const FormLogin = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const loggedIn = useSelector(selectIsLogged);
   const handleLogin = async (values: FormikValues) => {
     try {
-      const res = await onLogin({
+      dispatch(authActions.login({
         email: values.email,
         password: values.password,
-      });
-      if (res.error) {
-        Alert.alert('Error', res.error);
-      } else {
-        // save state login
-        dispatch(loginSaveState(true));
-        navigate('BottomTabs');
+      }));
+      console.log(loggedIn);
+      if (loggedIn === false) {
+        Alert.alert('Login failed', 'Please check your email and password');
       }
     } catch (error) {
       Alert.alert('Error', error.message);
     }
   };
   const handleGoToSignUp = () => {
-    navigate('Register');
+    navigation.navigate('Register');
   };
   return (
         <Formik initialValues={{
