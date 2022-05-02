@@ -39,10 +39,7 @@ const AccountScreen = () => {
   const dispatch = useDispatch();
   const hideMenu = () => setVisibleOptions(false);
   const showMenu = () => setVisibleOptions(true);
-  const handleLogout = () => {
-    console.log('logout');
-    dispatch(authActions.logout());
-  };
+
   const getUserInfo = async () => {
     try {
       setLoading(true);
@@ -64,12 +61,18 @@ const AccountScreen = () => {
   const onRefresh = () => {
     setRefreshing(true);
     getPinsUser(userInfo.id).then();
+    getUserInfo().then();
     setRefreshing(false);
   };
   const goToUpdateScreen = () => {
     navigation.navigate('ProfileUser');
     hideMenu();
   };
+  const handleLogout = () => {
+    dispatch(authActions.logout());
+    hideMenu();
+  };
+
   useEffect(() => {
     getUserInfo().then();
   }, []);
@@ -127,6 +130,7 @@ const AccountScreen = () => {
                          onRequestClose={hideMenu}
                      >
                        <MenuItem onPress={goToUpdateScreen}>Cập nhật thông tin</MenuItem>
+
                        <MenuDivider />
                        <MenuItem onPress={handleLogout}>
                          <Text style={{ color: COLORS.error }}>Đăng xuất</Text>

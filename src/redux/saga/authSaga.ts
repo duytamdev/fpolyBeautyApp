@@ -8,15 +8,14 @@ import axiosInstance from '../../config/axios';
 import CONSTANTS from '../../constants';
 
 function* login(action) {
-  console.log('login saga', action.payload);
   try {
     const res = yield axiosInstance.post('/auth/login', action.payload);
     if (res.error === null) {
       yield put(authActions.loginSuccess(res.data));
       const decoded = jwtDecode<JwtPayload>(res.response);
-      console.log(decoded);
       yield AsyncStorage.setItem(CONSTANTS.ID_USER, decoded.id.toString());
       yield AsyncStorage.setItem(CONSTANTS.USER_INFO, JSON.stringify(decoded));
+      yield AsyncStorage.setItem(CONSTANTS.IS_LOGIN, JSON.stringify(true));
     } else {
       yield put(authActions.loginFailure());
     }
@@ -26,11 +25,19 @@ function* login(action) {
   }
 }
 function* logout() {
-  console.log('logout saga');
-  yield put(authActions.logout());
   yield AsyncStorage.removeItem(CONSTANTS.ID_USER);
+  yield AsyncStorage.removeItem(CONSTANTS.USER_INFO);
 }
 export default function* watchAuthSaga() {
+  let isLogin = false;
+  yield AsyncStorage.getItem(CONSTANTS.IS_LOGIN, (err, value) => {
+    isLogin = JSON.parse(value);
+  });
+  console.log(isLogin);
+  if (isLogin) {
+    yield put(authActions.loginSuccess());
+  }
+
   yield takeLatest(authActions.login.toString(), login);
   yield takeLatest(authActions.logout.toString(), logout);
 }

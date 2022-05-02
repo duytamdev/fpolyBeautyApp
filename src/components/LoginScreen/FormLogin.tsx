@@ -6,10 +6,11 @@ import { Formik, FormikValues } from 'formik';
 import * as Yup from 'yup';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
+import ProgressDialog from 'react-native-progress-dialog';
 import MyInput from '../AuthScreen/MyInput';
 import { COLORS } from '../../constants';
 import MyButton from '../AuthScreen/MyButton';
-import { authActions, selectIsLogged } from '../../redux/reducers/authSlice';
+import { authActions, selectIsLogged, selectLogging } from '../../redux/reducers/authSlice';
 
 const loginYupSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email format').required('Required!'),
@@ -20,13 +21,14 @@ const FormLogin = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const loggedIn = useSelector(selectIsLogged);
+  const islogging = useSelector(selectLogging);
+
   const handleLogin = async (values: FormikValues) => {
     try {
       dispatch(authActions.login({
         email: values.email,
         password: values.password,
       }));
-      console.log(loggedIn);
       if (loggedIn === false) {
         Alert.alert('Login failed', 'Please check your email and password');
       }
@@ -49,6 +51,7 @@ const FormLogin = () => {
               handleBlur, handleChange, handleSubmit, values, errors, isValid,
             }) => (
                 <View style={styles.inputContainer}>
+                  <ProgressDialog loaderColor={COLORS.primary} label={'Đang đăng nhập...'} visible={islogging} />
                     <View>
                         <MyInput value={values.email}
                                  onChangeText={handleChange('email')}
